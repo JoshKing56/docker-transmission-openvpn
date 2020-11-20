@@ -7,7 +7,7 @@ RUN echo "@community http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /et
     && apk add --no-cache -X "http://dl-cdn.alpinelinux.org/alpine/edge/testing" qbittorrent-nox \
     # TODO: replace dependancies 
     && apk --no-cache add bash dumb-init ip6tables ufw@community openvpn shadow transmission-daemon transmission-cli \
-        curl jq tzdata openrc tinyproxy tinyproxy-openrc openssh unrar git python\
+        curl jq tzdata openrc tinyproxy tinyproxy-openrc openssh unrar git python3\
     # TODO: Rename directory below
     && mkdir -p /opt/transmission-ui \ 
     # && echo "Install Combustion" \
