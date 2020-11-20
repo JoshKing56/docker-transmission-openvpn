@@ -4,28 +4,33 @@ VOLUME /data
 VOLUME /config
 
 RUN echo "@community http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk add --no-cache -X "http://dl-cdn.alpinelinux.org/alpine/edge/testing" qbittorrent-nox \
+    # TODO: replace dependancies 
     && apk --no-cache add bash dumb-init ip6tables ufw@community openvpn shadow transmission-daemon transmission-cli \
-        curl jq tzdata openrc tinyproxy tinyproxy-openrc openssh unrar git \
-    && mkdir -p /opt/transmission-ui \
-    && echo "Install Combustion" \
-    && wget -qO- https://github.com/Secretmapper/combustion/archive/release.tar.gz | tar xz -C /opt/transmission-ui \
-    && echo "Install kettu" \
-    && wget -qO- https://github.com/endor/kettu/archive/master.tar.gz | tar xz -C /opt/transmission-ui \
-    && mv /opt/transmission-ui/kettu-master /opt/transmission-ui/kettu \
-    && echo "Install Transmission-Web-Control" \
-    && mkdir /opt/transmission-ui/transmission-web-control \
-    && curl -sL `curl -s https://api.github.com/repos/ronggang/transmission-web-control/releases/latest | jq --raw-output '.tarball_url'` | tar -C /opt/transmission-ui/transmission-web-control/ --strip-components=2 -xz \
-    && ln -s /usr/share/transmission/web/style /opt/transmission-ui/transmission-web-control \
-    && ln -s /usr/share/transmission/web/images /opt/transmission-ui/transmission-web-control \
-    && ln -s /usr/share/transmission/web/javascript /opt/transmission-ui/transmission-web-control \
-    && ln -s /usr/share/transmission/web/index.html /opt/transmission-ui/transmission-web-control/index.original.html \
-    && rm -rf /tmp/* /var/tmp/* \
-    && groupmod -g 1000 users \
-    && useradd -u 911 -U -d /config -s /bin/false abc \
-    && usermod -G users abc
+        curl jq tzdata openrc tinyproxy tinyproxy-openrc openssh unrar git python\
+    # TODO: Rename directory below
+    && mkdir -p /opt/transmission-ui \ 
+    # && echo "Install Combustion" \
+    # && wget -qO- https://github.com/Secretmapper/combustion/archive/release.tar.gz | tar xz -C /opt/transmission-ui \
+    # && echo "Install kettu" \
+    # && wget -qO- https://github.com/endor/kettu/archive/master.tar.gz | tar xz -C /opt/transmission-ui \
+    # && mv /opt/transmission-ui/kettu-master /opt/transmission-ui/kettu \
+    # && echo "Install Transmission-Web-Control" \
+    # && mkdir /opt/transmission-ui/transmission-web-control \
+    # && curl -sL `curl -s https://api.github.com/repos/ronggang/transmission-web-control/releases/latest | jq --raw-output '.tarball_url'` | tar -C /opt/transmission-ui/transmission-web-control/ --strip-components=2 -xz \
+    # && ln -s /usr/share/transmission/web/style /opt/transmission-ui/transmission-web-control \
+    # && ln -s /usr/share/transmission/web/images /opt/transmission-ui/transmission-web-control \
+    # && ln -s /usr/share/transmission/web/javascript /opt/transmission-ui/transmission-web-control \
+    # && ln -s /usr/share/transmission/web/index.html /opt/transmission-ui/transmission-web-control/index.original.html \
+    # && rm -rf /tmp/* /var/tmp/* \
+    # && groupmod -g 1000 users \
+    # && useradd -u 911 -U -d /config -s /bin/false abc \
+    # && usermod -G users abc
+
 
 # Add configuration and scripts
 ADD openvpn/ /etc/openvpn/
+# TODO: Replace below line
 ADD transmission/ /etc/transmission/
 ADD tinyproxy /opt/tinyproxy/
 ADD scripts /etc/scripts/
@@ -67,5 +72,5 @@ LABEL org.opencontainers.image.revision=$REVISION
 LABEL autoheal=true
 
 # Expose port and run
-EXPOSE 9091
+EXPOSE 8080
 CMD ["dumb-init", "/etc/openvpn/start.sh"]

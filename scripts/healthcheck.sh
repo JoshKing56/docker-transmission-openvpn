@@ -30,6 +30,7 @@ if [[ ${OPENVPN} -ne 1 ]]; then
 	echo "Openvpn process not running"
 	exit 1
 fi
+# TODO: Replace this with qbt
 if [[ ${TRANSMISSION} -ne 1 ]]; then
 	echo "transmission-daemon process not running"
 	exit 1
